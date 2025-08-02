@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/luketucich/terminal-tomato/timer"
 	"github.com/luketucich/terminal-tomato/utils"
 	"github.com/spf13/cobra"
+	"time"
 )
 
 var startCmd = &cobra.Command{
@@ -14,12 +15,13 @@ var startCmd = &cobra.Command{
 		shortBreakTime := utils.PromptInt("How many minutes for a short break?")
 		longBreakTime := utils.PromptInt("How many minutes for a long break?")
 
-		utils.PrintTomato(fmt.Sprintf(
-			"Starting Pomodoro\n\n"+
-				"  Work Time   : %2d mins\n"+
-				"  Short Break : %2d mins\n"+
-				"  Long Break  : %2d mins\n",
-			workTime, shortBreakTime, longBreakTime))
+		t := timer.NewTimer(
+			time.Minute*time.Duration(workTime),
+			time.Minute*time.Duration(shortBreakTime),
+			time.Minute*time.Duration(longBreakTime),
+		)
+
+		t.Start()
 	},
 }
 
