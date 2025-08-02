@@ -14,16 +14,12 @@ type Timer struct {
 }
 
 func NewTimer(workTime time.Duration, shortBreakTime time.Duration, longBreakTime time.Duration) *Timer {
-	workTimeMins := int(workTime.Minutes())
-	shortBreakTimeMins := int(shortBreakTime.Minutes())
-	longBreakTimeMins := int(longBreakTime.Minutes())
-
 	utils.PrintTomato(fmt.Sprintf(
 		"Starting Pomodoro\n\n"+
-			"  Work Time   : %2d mins\n"+
-			"  Short Break : %2d mins\n"+
-			"  Long Break  : %2d mins\n",
-		workTimeMins, shortBreakTimeMins, longBreakTimeMins))
+			"  Work Time   : %v\n"+
+			"  Short Break : %v\n"+
+			"  Long Break  : %v\n",
+		workTime, shortBreakTime, longBreakTime))
 
 	return &Timer{
 		workTime:       workTime,
@@ -36,15 +32,19 @@ func NewTimer(workTime time.Duration, shortBreakTime time.Duration, longBreakTim
 func (t *Timer) Start() {
 	for {
 		utils.Alert(fmt.Sprintf("Work session started! Focus for %v", t.workTime))
-		time.Sleep(t.workTime)
+		utils.PrintTomato("Work session started!")
+		utils.PrintAnimatedProgressBar(t.workTime)
+
 		t.cycles++
 
 		if t.cycles > 0 && t.cycles%4 == 0 {
 			utils.Alert(fmt.Sprintf("Work session ended! Take a long break for %v", t.longBreakTime))
-			time.Sleep(t.longBreakTime)
+			utils.PrintTomato("Long break started! Relax and recharge.")
+			utils.PrintAnimatedProgressBar(t.longBreakTime)
 		} else {
 			utils.Alert(fmt.Sprintf("Work session ended! Take a short break for %v", t.shortBreakTime))
-			time.Sleep(t.shortBreakTime)
+			utils.PrintTomato("Short break started! Take a quick rest.")
+			utils.PrintAnimatedProgressBar(t.shortBreakTime)
 		}
 	}
 }
