@@ -26,7 +26,7 @@ func printStaticProgressBar(elapsed, duration time.Duration) {
 	mins := totalSeconds / 60
 	secs := totalSeconds % 60
 
-	fmt.Printf("\r[%s] %02d:%02d remaining", bar, mins, secs)
+	fmt.Printf("\r[%s] %02d:%02d remaining ", bar, mins, secs)
 }
 
 func PrintAnimatedProgressBar(duration time.Duration) {
@@ -45,5 +45,5 @@ func PrintAnimatedProgressBar(duration time.Duration) {
 	}
 
 	bar := strings.Repeat("▮", 30)
-	fmt.Printf("\r[%s] 00:00 remaining\n\n", bar)
+	fmt.Printf("\r[%s] 00:00 remaining \n\n", bar)
 }

@@ -54,9 +54,7 @@ func (t *Timer) displayProgressBar(duration time.Duration) {
 func (t *Timer) workSession() {
 	utils.Alert(fmt.Sprintf("Work session started! Focus for %v", t.workTime))
 	utils.PrintTomato("Work session started!")
-
 	go t.displayProgressBar(t.workTime)
-
 	t.cycles++
 }
 
@@ -70,35 +68,31 @@ func (t *Timer) breakSession() {
 		utils.PrintTomato("Short break started! Take a quick rest.")
 		go t.displayProgressBar(t.shortBreakTime)
 	}
-
 }
 
 func (t *Timer) TimerLoop() {
 	go t.listenForCommands()
+
+	utils.PrintTomato("Controls: [e] End, [s] Skip")
 
 	isWorkSession := true
 	t.workSession()
 
 	for {
 		select {
-
-		// Handle command input
 		case cmd := <-t.controlChan:
 			switch cmd {
-
-			case "stop":
-				utils.PrintTomato("Timer stopped. Goodbye!")
+			case "e":
+				utils.PrintTomato("Timer ended. Goodbye!")
 				return
-			case "skip":
+			case "s":
 				utils.PrintTomato("Skipping current session...")
 				go func() { t.sessionDone <- true }()
 			default:
-				utils.PrintTomato(fmt.Sprintf("Unknown command: %s. Available: stop, skip", cmd))
+				utils.PrintTomato(fmt.Sprintf("Unknown command: %s. Available: [e] End, [s] Skip", cmd))
 			}
 
-		// Handle work + break sessions
 		case <-t.sessionDone:
-
 			if isWorkSession {
 				t.breakSession()
 				isWorkSession = false
