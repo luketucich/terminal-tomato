@@ -21,7 +21,7 @@ var startCmd = &cobra.Command{
 			time.Minute*time.Duration(longBreakTime),
 		)
 
-		t.Start()
+		t.TimerLoop()
 	},
 }
 
